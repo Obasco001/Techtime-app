@@ -26,8 +26,8 @@ const COLORS = ['#0ea5e9', '#8b5cf6', '#10b981', '#f59e0b'];
 export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [entries, setEntries] = useState<TimeEntry[]>([]);
   const [loading, setLoading] = useState(false);
-  const [analyzing, setAnalyzing] = useState(false);
-  const [aiInsight, setAiInsight] = useState<string | null>(null);
+    const [analyzing, setAnalyzing] = useState(false);
+    const [insight, setInsight] = useState<string | null>(null);
 
   // Initialize with some data
   useEffect(() => {
@@ -44,12 +44,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleAiAnalysis = async () => {
-    setAnalyzing(true);
-    const insight = await analyzeProductivity(entries);
-    setAiInsight(insight);
-    setAnalyzing(false);
-  };
+    const handleAnalysis = async () => {
+        setAnalyzing(true);
+        const result = await analyzeProductivity(entries);
+        setInsight(result);
+        setAnalyzing(false);
+    };
 
   const activeTask = entries.find(e => e.status === 'In Progress') || entries[0];
 
@@ -66,35 +66,35 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
           </div>
           <div className="flex gap-3">
              <Button variant="outline" size="sm"><Plus className="w-4 h-4 mr-2"/> New Project</Button>
-             <Button 
-                variant="primary" 
-                size="sm" 
-                onClick={handleAiAnalysis} 
-                disabled={analyzing}
-                className="bg-gradient-to-r from-indigo-500 to-purple-600 border-none"
-             >
-                <Sparkles className={`w-4 h-4 mr-2 ${analyzing ? 'animate-spin' : ''}`} />
-                {analyzing ? 'Thinking...' : 'AI Insights'}
-             </Button>
+                 <Button 
+                     variant="primary" 
+                     size="sm" 
+                     onClick={handleAnalysis} 
+                     disabled={analyzing}
+                     className="bg-gradient-to-r from-indigo-500 to-purple-600 border-none"
+                 >
+                     <Sparkles className={`w-4 h-4 mr-2 ${analyzing ? 'animate-spin' : ''}`} />
+                     {analyzing ? 'Analyzing...' : 'Insights'}
+                 </Button>
           </div>
         </header>
 
         {/* AI Insight Box */}
-        {aiInsight && (
+        {insight && (
           <div className="mb-8 p-6 bg-gradient-to-r from-primary-900/30 to-purple-900/30 border border-primary-500/30 rounded-xl animate-in fade-in slide-in-from-top-4">
              <div className="flex items-start gap-4">
                 <div className="p-2 bg-primary-500/20 rounded-lg mt-1">
                     <Sparkles className="w-5 h-5 text-primary-400" />
                 </div>
                 <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-white mb-2">Gemini Analysis</h3>
+                    <h3 className="text-lg font-semibold text-white mb-2">Analysis</h3>
                     <div className="prose prose-invert prose-sm max-w-none text-gray-300">
-                        {/* Simple rendering for the markdown-like text from AI */}
-                        {aiInsight.split('\n').map((line, i) => (
+                        {/* Simple rendering for the markdown-like text from analysis */}
+                        {insight.split('\n').map((line, i) => (
                             <p key={i} className="mb-1">{line}</p>
                         ))}
                     </div>
-                    <Button variant="ghost" size="sm" className="mt-4 -ml-2" onClick={() => setAiInsight(null)}>Dismiss</Button>
+                    <Button variant="ghost" size="sm" className="mt-4 -ml-2" onClick={() => setInsight(null)}>Dismiss</Button>
                 </div>
              </div>
           </div>
