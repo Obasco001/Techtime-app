@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Sidebar } from './Sidebar';
 import { Button } from '../Button';
 import { TimeEntry } from '../../types';
-import { analyzeProductivity, generateMockSchedule } from '../../services/geminiService';
+import { analyzeProductivity, generateMockSchedule } from '../../services/dataService';
 import { 
   BarChart, 
   Bar, 
